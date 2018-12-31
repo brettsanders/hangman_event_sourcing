@@ -13,3 +13,15 @@ Only 1 Stream for now
     <Data>
   }
 }
+
+{
+  username: "brett",
+  game_id: "fa1e26bd-baec-432d-a27b-65c0c9ecd05c",
+  type: "EVENT",
+  who: "USER",
+  when: "2018-12-31 12:34:53 -0500",
+  what: {
+    action: "GUESS",
+    letter: "A"
+  }
+}

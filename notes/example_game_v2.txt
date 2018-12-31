@@ -1,0 +1,45 @@
+{
+  username: "player_1",
+  game_id: nil,
+  type: "EVENT",
+  who: "USER",
+  when: "2018-12-31 12:34:53 -0500",
+  what: {
+    action: "START_GAME"
+  }
+}
+
+- - -
+
+{
+  username: "player_1",
+  game_id: nil,
+  type: "COMMAND",
+  who: "GAME_MANAGER",
+  when: "2018-12-31 12:34:53 -0500",
+  what: {
+    action: "START_GAME",
+  }
+}
+
+- - -
+
+{
+  username: "player_1",
+  game_id: "fa1e26bd-baec-432d-a27b-65c0c9ecd05c",
+  type: "EVENT",
+  who: "GAME_MANAGER",
+  when: "2018-12-31 12:34:53 -0500",
+  what: {
+    action: "START_GAME",
+    game_state: {
+      game_id: "fa1e26bd-baec-432d-a27b-65c0c9ecd05c",
+      random_word: "dog",
+      hits: [],
+      misses: []
+    }
+  }
+}
+
+- - -
+

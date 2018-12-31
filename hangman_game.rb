@@ -1,6 +1,10 @@
 require 'securerandom'
 require_relative 'helpers/events'
+require 'json'
+require 'pry'
 
+file = File.read('test_data/winning_game.json')
+json = JSON.parse (file)
 
 # Game Loop
 # end_game = false

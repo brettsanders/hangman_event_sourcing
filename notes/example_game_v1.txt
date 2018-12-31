@@ -1,0 +1,99 @@
+What Event data is ESSENTIAL to event source?
+Am realizing the core data is different from the data needed for the Structure on top of the events
+can get up to 6 misses
+
+These are "Game Events"
+My process manager will translate these over to Point Events
+
+is easy to start brining a lot of appliation logic into the core "fact" logic
+if think of this as the ledger to Audi, this is all that's really needed to understand the Game
+to understand how the System itself works, could include more data
+
+Thinking from the Audit perspective is helpful
+
+just make sure is "append only" for the events
+
+{
+  events: [
+    {
+      timestamp: "2018-12-31 18:13:00 UTC",
+      game_id: "30a28b0d-9752-4ccf-a620-cf08c617cae4",
+      player: "brett",
+      random_word: "dog",
+      hits: [],
+      misses: [],
+      guess: nil
+    },
+
+    {
+      timestamp: "2018-12-31 18:14:00 UTC",
+      game_id: "30a28b0d-9752-4ccf-a620-cf08c617cae4",
+      player: "brett",
+      random_word: "dog",
+      hits: [],
+      misses: ['a'],
+      guess: 'a'
+    },
+
+    {
+      timestamp: "2018-12-31 18:15:00 UTC",
+      game_id: "30a28b0d-9752-4ccf-a620-cf08c617cae4",
+      player: "brett",
+      random_word: "dog",
+      hits: [],
+      misses: ['a', 'e'],
+      guess: 'e'
+    },
+
+    {
+      timestamp: "2018-12-31 18:16:00 UTC",
+      game_id: "30a28b0d-9752-4ccf-a620-cf08c617cae4",
+      player: "brett",
+      random_word: "dog",
+      hits: [],
+      misses: ['a', 'e', 'i'],
+      guess: 'i'
+    },
+
+    {
+      timestamp: "2018-12-31 18:17:00 UTC",
+      game_id: "30a28b0d-9752-4ccf-a620-cf08c617cae4",
+      player: "brett",
+      random_word: "dog",
+      hits: ['o'],
+      misses: ['a', 'e', 'i']
+      guess: 'o'
+    },
+
+    {
+      timestamp: "2018-12-31 18:18:00 UTC",
+      game_id: "30a28b0d-9752-4ccf-a620-cf08c617cae4",
+      player: "brett",
+      random_word: "dog",
+      hits: ['o'],
+      misses: ['a', 'e', 'i', 'f']
+      guess: 'f'
+    },
+
+    {
+      timestamp: "2018-12-31 18:19:00 UTC",
+      game_id: "30a28b0d-9752-4ccf-a620-cf08c617cae4",
+      player: "brett",
+      random_word: "dog",
+      hits: ['d', 'o'],
+      misses: ['a', 'e', 'i', 'f'],
+      guess: 'd'
+    },
+
+    {
+      timestamp: "2018-12-31 18:20:00 UTC",
+      game_id: "30a28b0d-9752-4ccf-a620-cf08c617cae4",
+      player: "brett",
+      random_word: "dog",
+      hits: ['d','o','g'],
+      misses: ['a', 'e', 'i', 'f'],
+      guess: 'g'
+    },
+
+  ]
+}
