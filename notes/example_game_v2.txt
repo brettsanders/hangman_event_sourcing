@@ -43,3 +43,30 @@
 
 - - -
 
+
+GameScorer Aggregate
+  subscribe to all events
+  look for patterns
+
+  Aggregate
+  Keep track of Streaks
+  Need to use the GameScoringRules
+
+  state: {
+    @streak = 0
+  }
+
+  onGuess(
+    right?
+      streak += 2
+    wrong
+      streak = 0
+      emit event {streak 2}
+  )
+
+
+GameScoringRules
+steaks
+  2: +5 points
+  3: +50 points
+  4: +100
