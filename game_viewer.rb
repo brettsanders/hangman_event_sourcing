@@ -1,13 +1,27 @@
-require 'securerandom'
-require 'json'
-require 'pry'
+require_relative 'libraries'
+require_relative 'read_models/game_renderer.rb'
+require_relative 'domain_logic/aggregates/game_scorer.rb'
+require_relative 'domain_logic/pub_sub.rb'
 
-require_relative 'helpers/events'
+# Subscribers
+game_renderer = ReadModel::GameRenderer.new
+game_scorer = Aggregate::GameScorer.new
+
+# Read Models would need to come after the domain_logic handlers
+# In Rails, this is handled via the Request/Response flow
+pub_sub = PubSub.new(
+  subscribers: [
+    game_scorer,
+  ],
+  read_models: [
+    game_renderer
+  ]
+)
 
 # Given a Ledger of Events
 # Provide ability to View the Game state
 events_file = "winning_game"
-file = File.read("test_data/#{events_file}.json")
+file = File.read("test/#{events_file}.json")
 json = JSON.parse (file)
 events = json["events"]
 
@@ -30,25 +44,30 @@ until end_session
     end_session = true
   when "begin_replay"
     puts
-    puts "... press enter for next event"
-    puts "... (or exit to break)"
+    puts "... enter for next (exit to break)"
     total_events_count = events.length
 
-    puts "publishing events..."
-    
-    game_render = GameRender.new
-    game_scorer = GameScorer.new
+    game_render = ReadModel::GameRenderer.new
+    game_scorer = Aggregate::GameScorer.new
 
     events.each_with_index do |event, index|
       puts
       puts "[event #{index+1} of #{total_events_count}]"
       puts
 
-      pub_sub.pushlish(event)
+      p event
+      puts "publishing_event..."
+      pub_sub.publish(event)
 
       unless total_events_count == index
+        puts "...next, exit, or back"
         input = gets.chomp
-        break if input == "exit"
+        case input
+        when "exit"
+          break
+        when "next"
+          next
+        end
       end
     end
 

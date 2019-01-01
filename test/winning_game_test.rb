@@ -1,6 +1,4 @@
-require 'securerandom'
-require 'json'
-require 'pry'
+require_relative '../libraries'
 
 require_relative '../read_models/game_renderer.rb'
 require_relative '../domain_logic/aggregates/game_scorer.rb'
@@ -9,7 +7,7 @@ require_relative '../domain_logic/pub_sub.rb'
 # Given a Ledger of Events
 # Provide ability to View the Game state
 events_file = "winning_game"
-file = File.read("test_data/#{events_file}.json")
+file = File.read("test/#{events_file}.json")
 json = JSON.parse (file)
 
 # Get the Events from the JSON
@@ -30,6 +28,7 @@ pub_sub = PubSub.new(
     game_renderer
   ]
 )
+
 events.each {|event| pub_sub.publish(event) }
 
 # View Raw Events
@@ -40,7 +39,6 @@ events.each {|event| pub_sub.publish(event) }
 #   puts
 #   p event
 # end
-
 
 # - - - - - - - - - - - - - - - - - - - - - - - - -
 # TESTS
