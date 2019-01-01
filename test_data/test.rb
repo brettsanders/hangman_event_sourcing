@@ -22,7 +22,14 @@ game_scorer = Aggregate::GameScorer.new
 
 # Read Models would need to come after the domain_logic handlers
 # In Rails, this is handled via the Request/Response flow
-pub_sub = PubSub.new(subscribers: [game_scorer, game_renderer])
+pub_sub = PubSub.new(
+  subscribers: [
+    game_scorer,
+  ],
+  read_models: [
+    game_renderer
+  ]
+)
 events.each {|event| pub_sub.publish(event) }
 
 # View Raw Events
