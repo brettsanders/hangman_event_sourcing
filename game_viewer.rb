@@ -34,12 +34,17 @@ until end_session
     puts "... (or exit to break)"
     total_events_count = events.length
 
+    puts "publishing events..."
+    
+    game_render = GameRender.new
+    game_scorer = GameScorer.new
+
     events.each_with_index do |event, index|
       puts
       puts "[event #{index+1} of #{total_events_count}]"
       puts
 
-      p event
+      pub_sub.pushlish(event)
 
       unless total_events_count == index
         input = gets.chomp
