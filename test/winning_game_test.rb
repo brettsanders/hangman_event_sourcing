@@ -8,10 +8,10 @@ require_relative '../domain_logic/pub_sub.rb'
 # Provide ability to View the Game state
 events_file = "winning_game"
 file = File.read("test/#{events_file}.json")
-json = JSON.parse (file)
+json = JSON.parse(file, symbolize_names: true)
 
 # Get the Events from the JSON
-events = json["events"]
+events = json[:events]
 total_events_count = events.length
 
 # Subscribers
@@ -44,4 +44,8 @@ events.each {|event| pub_sub.publish(event) }
 # TESTS
 # - - - - - - - - - - - - - - - - - - - - - - - - -
 # Assertions
-puts "passing: score & streak for single game\n" if game_scorer.games_and_score_data == {"30a28b0d-9752-4ccf-a620-cf08c617cae4"=>{:score=>120, :streak=>2}}
+if game_scorer.games_and_score_data == {"30a28b0d-9752-4ccf-a620-cf08c617cae4"=>{:score=>120, :streak=>2}}
+  puts "passing: score & streak for single game\n" 
+else
+  puts "FAIL: score & streak for single game\n" 
+end

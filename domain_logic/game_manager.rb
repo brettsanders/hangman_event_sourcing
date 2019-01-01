@@ -4,26 +4,50 @@ require_relative '../read_models/game_renderer.rb'
 require_relative 'aggregates/game_scorer.rb'
 require_relative 'pub_sub.rb'
 
+RANDOM_WORDS = %w(dog cat moose elephant horse gorilla)
+
 class GameManager
   attr_accessor :end_game,
                 :game_id,
                 :player_name,
                 :game_filepath,
-                :completed_game
+                :completed_game,
+                :random_word,
+                :hits,
+                :misses,
+                :pub_sub,
+                :last_guess
 
   def initialize
     @game_id = SecureRandom.uuid
     @player_name = nil
     @game_filepath = nil
     @completed_game = false
+    @random_word = RANDOM_WORDS.sample
+    @hits = []
+    @misses = []
+    @last_guess = nil
+
+    @pub_sub = PubSub.new(
+      subscribers: [Aggregate::GameScorer.new],
+      read_models: [ReadModel::GameRenderer.new]
+    )
+
+    @game_state = {
+
+    }
   end
 
   def start_game
     display_welcome_message
     setup_folder_and_file_for_new_game
 
-    # Game Loop
     loop do
+      # capture guess...
+
+      e = build_event
+      publish_event(e)
+
       puts "End game? (Y/N)"
       end_game_input = gets.chomp
       exit_game if end_game_input == "Y"
@@ -31,6 +55,36 @@ class GameManager
   end
 
   private
+
+  def build_event
+    {
+      "timestamp": Time.now.utc,
+      "game_id": self.game_id,
+      "player": self.player_name,
+      "random_word": self.random_word,
+      "hits": self.hits,
+      "misses": self.misses,
+      "guess": self.last_guess
+    }
+  end
+
+  def publish_event(event)
+    self.pub_sub.publish(event)
+  end
+
+  def save_game
+    # write to the json file
+    # prob easier to just store the whole thing internally and then re-write the file ...
+    # {
+    #   "timestamp": "2018-12-31 18:13:00 UTC",
+    #   "game_id": "30a28b0d-9752-4ccf-a620-cf08c617cae4",
+    #   "player": "brett",
+    #   "random_word": "dog",
+    #   "hits": [],
+    #   "misses": [],
+    #   "guess": ""
+    # }
+  end
 
   def exit_game
     puts "Thanks for playing!"

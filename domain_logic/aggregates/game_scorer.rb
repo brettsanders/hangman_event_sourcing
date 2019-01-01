@@ -15,7 +15,7 @@ module Aggregate
 
     def call(event)
       # Find the Scoring Data for only this Game
-      game_id = event["game_id"]
+      game_id = event[:game_id]
       return unless game_id
 
       this_game = games_and_score_data[game_id]
@@ -23,7 +23,7 @@ module Aggregate
       # Handle the Points for Streaks logic
       # (Time based points next)
       if this_game
-        if event["hits"].include?(event["guess"])
+        if event[:hits].include?(event[:guess])
           this_game[:streak] += 1
 
           if this_game[:streak] > 3
