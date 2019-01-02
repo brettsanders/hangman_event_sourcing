@@ -19,7 +19,7 @@ class GameManager
                 :last_guess,
                 :game_state
 
-  def initialize
+  def initialize(pub_sub: nil)
     @game_id = SecureRandom.uuid
     @player_name = nil
     @game_filepath = nil
@@ -29,10 +29,7 @@ class GameManager
     @misses = []
     @last_guess = nil
 
-    @pub_sub = PubSub.new(
-      subscribers: [Aggregate::GameScorer.new],
-      read_models: [ReadModel::GameRenderer.new]
-    )
+    @pub_sub = pub_sub
 
     @game_state = {
       events: []
@@ -62,10 +59,21 @@ class GameManager
       publish_event(event)
       save_event(event)
       save_game
+
+      exit if won_game?
+      exit if lost_game?
     end
   end
 
   private
+
+  def won_game?
+    self.hits.sort == self.random_word.split('').uniq.sort
+  end
+
+  def lost_game?
+    self.misses.length >= 6
+  end
 
   def build_event
     {
