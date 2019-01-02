@@ -95,7 +95,7 @@ class GameManager
     json = {
       events: self.events
     }
-    
+
     File.open(self.game_filepath, "w+") do |f|
       f.write(JSON.generate(json))
     end
