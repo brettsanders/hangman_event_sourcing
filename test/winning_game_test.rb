@@ -45,7 +45,7 @@ events.each {|event| pub_sub.publish(event) }
 # - - - - - - - - - - - - - - - - - - - - - - - - -
 # Assertions
 if game_scorer.games_and_score_data == {"30a28b0d-9752-4ccf-a620-cf08c617cae4"=>{:score=>120, :streak=>2}}
-  puts "passing: score & streak for single game\n" 
+  puts "passing: score & streak for single game\n"
 else
-  puts "FAIL: score & streak for single game\n" 
+  puts "FAIL: score & streak for single game\n"
 end

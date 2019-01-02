@@ -17,7 +17,7 @@ class GameManager
                 :misses,
                 :pub_sub,
                 :last_guess,
-                :game_state
+                :events
 
   def initialize(pub_sub: nil)
     @game_id = SecureRandom.uuid
@@ -28,12 +28,8 @@ class GameManager
     @hits = []
     @misses = []
     @last_guess = nil
-
     @pub_sub = pub_sub
-
-    @game_state = {
-      events: []
-    }
+    @events = []
   end
 
   def start_game
@@ -81,9 +77,9 @@ class GameManager
       "game_id": self.game_id,
       "player": self.player_name,
       "random_word": self.random_word,
-      "hits": self.hits,
-      "misses": self.misses,
-      "guess": self.last_guess
+      "hits": self.hits.dup,
+      "misses": self.misses.dup,
+      "guess": self.last_guess.dup
     }
   end
 
@@ -92,12 +88,16 @@ class GameManager
   end
 
   def save_event(event)
-    self.game_state[:events] << event
+    self.events << event
   end
 
   def save_game
+    json = {
+      events: self.events
+    }
+    
     File.open(self.game_filepath, "w+") do |f|
-      f.write(JSON.generate(self.game_state))
+      f.write(JSON.generate(json))
     end
   end
 
@@ -143,11 +143,12 @@ class GameManager
 
     # create file for user
     today_date = Date.today
+    time_now = Time.now.iso8601
     game_folder_path = "_events/#{player_name_input}/#{today_date}"
     FileUtils.mkdir_p(game_folder_path)
 
     # create game file
-    self.game_filepath = game_folder_path + "/#{game_id}.rb"
+    self.game_filepath = game_folder_path + "/#{time_now}.json"
     FileUtils.touch(self.game_filepath)
   end
 end

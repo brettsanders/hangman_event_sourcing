@@ -10,12 +10,10 @@ module ReadModel
 
       if won_game?(event)
         puts "Congratulations! You won the game"
-        exit
       end
 
       if lost_game?(event)
         puts "Sorry, you lost"
-        exit
       end
 
       if event[:guess] == "" or event[:guess].nil?
