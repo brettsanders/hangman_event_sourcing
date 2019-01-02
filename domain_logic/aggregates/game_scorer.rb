@@ -27,7 +27,7 @@ module Aggregate
           this_game[:streak] += 1
 
           if this_game[:streak] > 3
-            this_game[:score] += STREAK_SCORE[this_game[:higher_than_3]]
+            this_game[:score] += STREAK_SCORE[:higher_than_3]
           else
             this_game[:score] += STREAK_SCORE[this_game[:streak]]
           end

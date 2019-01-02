@@ -16,7 +16,8 @@ class GameManager
                 :hits,
                 :misses,
                 :pub_sub,
-                :last_guess
+                :last_guess,
+                :game_state
 
   def initialize
     @game_id = SecureRandom.uuid
@@ -34,7 +35,7 @@ class GameManager
     )
 
     @game_state = {
-
+      events: []
     }
   end
 
@@ -43,14 +44,24 @@ class GameManager
     setup_folder_and_file_for_new_game
 
     loop do
-      # capture guess...
+      puts "Please guess a letter"
+      puts "(type quit end game)"
+      user_input = gets.chomp.downcase
+      exit_game if user_input == "quit"
 
-      e = build_event
-      publish_event(e)
+      hit = self.random_word.include?(user_input)
+      self.last_guess = user_input
 
-      puts "End game? (Y/N)"
-      end_game_input = gets.chomp
-      exit_game if end_game_input == "Y"
+      if hit
+        self.hits << user_input
+      else
+        self.misses << user_input
+      end
+
+      event = build_event
+      publish_event(event)
+      save_event(event)
+      save_game
     end
   end
 
@@ -72,28 +83,24 @@ class GameManager
     self.pub_sub.publish(event)
   end
 
+  def save_event(event)
+    self.game_state[:events] << event
+  end
+
   def save_game
-    # write to the json file
-    # prob easier to just store the whole thing internally and then re-write the file ...
-    # {
-    #   "timestamp": "2018-12-31 18:13:00 UTC",
-    #   "game_id": "30a28b0d-9752-4ccf-a620-cf08c617cae4",
-    #   "player": "brett",
-    #   "random_word": "dog",
-    #   "hits": [],
-    #   "misses": [],
-    #   "guess": ""
-    # }
+    File.open(self.game_filepath, "w+") do |f|
+      f.write(JSON.generate(self.game_state))
+    end
   end
 
   def exit_game
     puts "Thanks for playing!"
 
-    if self.game_filepath and !self.completed_game
-      remove_gamefile
-      puts "Not saving your game (since you didn't finish)"
-      exit
-    end
+    # if self.game_filepath and !self.completed_game
+    #   remove_gamefile
+    #   puts "Not saving your game (since you didn't finish)"
+    #   exit
+    # end
   end
 
   def remove_gamefile
@@ -107,7 +114,7 @@ class GameManager
 
   def setup_folder_and_file_for_new_game
     puts "What is your player_name?"
-    player_name_input = gets.chomp
+    player_name_input = gets.chomp.downcase
     self.player_name = player_name_input
     exit if player_name_input == "quit"
 
