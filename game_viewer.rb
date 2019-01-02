@@ -18,12 +18,17 @@ pub_sub = PubSub.new(
   ]
 )
 
-# Given a Ledger of Events
-# Provide ability to View the Game state
-events_file = "winning_game"
-file = File.read("test/#{events_file}.json")
-json = JSON.parse (file)
-events = json["events"]
+if ARGV.any?
+  file = File.read(ARGV.shift)
+else
+  # Given a Ledger of Events
+  # Provide ability to View the Game state
+  events_file = "winning_game"
+  file = File.read("test/#{events_file}.json")
+end
+
+json = JSON.parse(file, symbolize_names: true)
+events = json[:events]
 
 end_session = false
 
