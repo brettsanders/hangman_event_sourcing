@@ -41,7 +41,11 @@ module Aggregate
           streak: 0
         }
       end
+
+      puts "Inside GameScorer"
+      p self
     end
+
 
   end
 end
