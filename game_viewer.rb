@@ -11,10 +11,7 @@ game_scorer = Aggregate::GameScorer.new
 # In Rails, this is handled via the Request/Response flow
 pub_sub = PubSub.new(
   subscribers: [
-    game_scorer,
-  ],
-  view: [
-    game_renderer
+    game_scorer, game_renderer
   ]
 )
 

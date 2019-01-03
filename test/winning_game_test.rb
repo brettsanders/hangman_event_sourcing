@@ -18,15 +18,8 @@ total_events_count = events.length
 game_renderer = Views::GameRenderer.new
 game_scorer = Aggregate::GameScorer.new
 
-# Read Models would need to come after the domain_logic handlers
-# In Rails, this is handled via the Request/Response flow
 pub_sub = PubSub.new(
-  subscribers: [
-    game_scorer,
-  ],
-  view: [
-    game_renderer
-  ]
+  subscribers: [ game_scorer, game_renderer ]
 )
 
 events.each {|event| pub_sub.publish(event) }
