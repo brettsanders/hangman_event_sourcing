@@ -1,6 +1,6 @@
 require_relative '../libraries'
 
-require_relative '../read_models/game_renderer.rb'
+require_relative '../views/game_renderer.rb'
 require_relative '../domain_logic/aggregates/game_scorer.rb'
 require_relative '../domain_logic/pub_sub.rb'
 
@@ -15,7 +15,7 @@ events = json[:events]
 total_events_count = events.length
 
 # Subscribers
-game_renderer = ReadModel::GameRenderer.new
+game_renderer = Views::GameRenderer.new
 game_scorer = Aggregate::GameScorer.new
 
 # Read Models would need to come after the domain_logic handlers
@@ -24,7 +24,7 @@ pub_sub = PubSub.new(
   subscribers: [
     game_scorer,
   ],
-  read_models: [
+  view: [
     game_renderer
   ]
 )

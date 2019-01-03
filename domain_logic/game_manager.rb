@@ -1,6 +1,6 @@
 require_relative '../libraries.rb'
 
-require_relative '../read_models/game_renderer.rb'
+require_relative '../views/game_renderer.rb'
 require_relative 'aggregates/game_scorer.rb'
 require_relative 'pub_sub.rb'
 

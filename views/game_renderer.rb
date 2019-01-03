@@ -1,6 +1,6 @@
 require_relative '../assets/images.rb'
 
-module ReadModel
+module Views
   class GameRenderer
     def call(event)
 

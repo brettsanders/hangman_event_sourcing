@@ -1,16 +1,16 @@
 class PubSub
-  attr_reader :subscribers, :read_models
+  attr_reader :subscribers, :view
 
-  def initialize(subscribers:, read_models: [])
+  def initialize(subscribers:, view: [])
     @subscribers = subscribers
-    @read_models = read_models
+    @view = view
   end
 
   def publish(event)
     subscribers.each {|subscriber|
       subscriber.call(event)
     }
-    read_models.each {|read_model|
+    view.each {|read_model|
       read_model.call(event)
     }
   end
