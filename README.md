@@ -45,7 +45,7 @@ I'll try using "Event Storming" to come up with what
 
 The Process Manager will come in to score the Game and assign Points
 
-Aggregates:
+scoring:
 Game
 GamePoints
 UserPoints

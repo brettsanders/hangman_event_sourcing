@@ -2,7 +2,10 @@ require_relative '../libraries.rb'
 
 require_relative '../views/game_renderer.rb'
 require_relative '../views/dude_game_renderer.rb'
-require_relative 'aggregates/game_scorer.rb'
+require_relative 'scoring/leaderboard_helper.rb'
+require_relative 'scoring/complexity.rb'
+require_relative 'scoring/streaks.rb'
+require_relative 'scoring/speed.rb'
 require_relative 'pub_sub.rb'
 
 RANDOM_WORDS = %w(dog cat moose elephant horse gorilla)
@@ -65,7 +68,7 @@ class GameManager
   private
 
   def won_game?
-    self.hits.sort == self.random_word.split('').uniq.sort
+    self.hits.length >= self.random_word.split('').uniq.length
   end
 
   def lost_game?
@@ -128,9 +131,9 @@ class GameManager
     exit if player_name_input == "quit"
 
     # create a folder for the User
-    FileUtils.mkdir_p "_events/#{player_name_input}"
+    FileUtils.mkdir_p "_gameplay_events/#{player_name_input}"
 
-    already_played = Dir["_events/#{player_name_input}/*"].length
+    already_played = Dir["_gameplay_events/#{player_name_input}/*"].length
     if already_played
       puts "Looks like you've played before"
       puts "... looks like you're played #{already_played} games before"
@@ -145,7 +148,7 @@ class GameManager
     # create file for user
     today_date = Date.today
     time_now = Time.now.iso8601
-    game_folder_path = "_events/#{player_name_input}/#{today_date}"
+    game_folder_path = "_gameplay_events/#{player_name_input}/#{today_date}"
     FileUtils.mkdir_p(game_folder_path)
 
     # create game file

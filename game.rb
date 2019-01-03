@@ -2,7 +2,9 @@ require_relative './domain_logic/game_manager.rb'
 
 pub_sub = PubSub.new(
   subscribers: [
-    Aggregate::GameScorer.new,
+    Scoring::Complexity.new,
+    Scoring::Speed.new,
+    Scoring::Streaks.new,
     Views::GameRenderer.new,
     # Views::DudeGameRenderer.new,
   ]

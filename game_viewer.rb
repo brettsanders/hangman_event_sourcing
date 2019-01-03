@@ -1,17 +1,24 @@
 require_relative 'libraries'
-require_relative 'views/game_renderer.rb'
-require_relative 'domain_logic/aggregates/game_scorer.rb'
+
 require_relative 'domain_logic/pub_sub.rb'
 
-# Subscribers
-game_renderer = Views::GameRenderer.new
-game_scorer = Aggregate::GameScorer.new
+require_relative 'views/game_renderer.rb'
+require_relative 'views/dude_game_renderer.rb'
+require_relative 'domain_logic/scoring/leaderboard_helper.rb'
+require_relative 'domain_logic/scoring/complexity.rb'
+require_relative 'domain_logic/scoring/streaks.rb'
+require_relative 'domain_logic/scoring/speed.rb'
 
+# Subscribers
 # Read Models would need to come after the domain_logic handlers
 # In Rails, this is handled via the Request/Response flow
 pub_sub = PubSub.new(
   subscribers: [
-    game_scorer, game_renderer
+    # Scoring::Complexity.new,
+    # Scoring::Speed.new,
+    # Scoring::Streaks.new,
+    Views::GameRenderer.new,
+    # Views::DudeGameRenderer.new,
   ]
 )
 
@@ -36,7 +43,7 @@ puts
 until end_session
   puts "- - - - - - - - - "
   puts "what would you like to do?"
-  puts "enter command (begin_replay, view_all_events, view_at, exit):"
+  puts "enter command (begin_replay, view_all_gameplay_events, view_at, exit):"
   puts
 
   user_input = gets.chomp
@@ -47,18 +54,18 @@ until end_session
   when "begin_replay"
     puts
     puts "... enter for next (exit to break)"
-    total_events_count = events.length
+    total_gameplay_events_count = events.length
 
     events.each_with_index do |event, index|
       puts
-      puts "[event #{index+1} of #{total_events_count}]"
+      puts "[event #{index+1} of #{total_gameplay_events_count}]"
       puts
 
       p event
       puts "publishing_event..."
       pub_sub.publish(event)
 
-      unless total_events_count == index
+      unless total_gameplay_events_count == index
         puts "...next, exit, or back"
         input = gets.chomp
         case input
@@ -72,7 +79,7 @@ until end_session
 
     puts "[end of events stream]"
 
-  when "view_all_events"
+  when "view_all_gameplay_events"
     pp events
   when "view_at"
     puts "enter timestamp:"

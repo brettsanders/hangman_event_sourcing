@@ -1,8 +1,13 @@
 require_relative '../libraries'
 
-require_relative '../views/game_renderer.rb'
-require_relative '../domain_logic/aggregates/game_scorer.rb'
 require_relative '../domain_logic/pub_sub.rb'
+
+require_relative '../views/game_renderer.rb'
+require_relative '../views/dude_game_renderer.rb'
+require_relative '../domain_logic/scoring/leaderboard_helper.rb'
+require_relative '../domain_logic/scoring/complexity.rb'
+require_relative '../domain_logic/scoring/streaks.rb'
+require_relative '../domain_logic/scoring/speed.rb'
 
 # Given a Ledger of Events
 # Provide ability to View the Game state
@@ -12,33 +17,38 @@ json = JSON.parse(file, symbolize_names: true)
 
 # Get the Events from the JSON
 events = json[:events]
-total_events_count = events.length
+total_gameplay_events_count = events.length
 
 # Subscribers
-game_renderer = Views::GameRenderer.new
-game_scorer = Aggregate::GameScorer.new
+# Do not sub the Scorers for now. Need way to write to a TEST file
 
 pub_sub = PubSub.new(
-  subscribers: [ game_scorer, game_renderer ]
+  subscribers: [
+    # Scoring::Complexity.new,
+    # Scoring::Speed.new,
+    Scoring::Streaks.new,
+    Views::GameRenderer.new,
+    # Views::DudeGameRenderer.new,
+  ]
 )
-
 events.each {|event| pub_sub.publish(event) }
-
-# View Raw Events
-# could extract this to an "event viewer"
-# events.each_with_index do |event, index|
-#   puts
-#   puts "[event #{index+1} of #{total_events_count}]"
-#   puts
-#   p event
-# end
 
 # - - - - - - - - - - - - - - - - - - - - - - - - -
 # TESTS
 # - - - - - - - - - - - - - - - - - - - - - - - - -
 # Assertions
-if game_scorer.games_and_score_data == {"30a28b0d-9752-4ccf-a620-cf08c617cae4"=>{:score=>120, :streak=>2}}
+
+if scoring_streaks.games_and_score_data == {"30a28b0d-9752-4ccf-a620-cf08c617cae4"=>{:score=>120, :streak=>2}}
   puts "passing: score & streak for single game\n"
 else
   puts "FAIL: score & streak for single game\n"
 end
+
+# View Raw Events
+# could extract this to an "event viewer"
+# events.each_with_index do |event, index|
+#   puts
+#   puts "[event #{index+1} of #{total_gameplay_events_count}]"
+#   puts
+#   p event
+# end

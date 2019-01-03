@@ -1,6 +1,7 @@
-module Aggregate
-  class GameScorer
+module Scoring
+  class Streaks
     attr_accessor :games_and_score_data
+    include LeaderboardHelper
 
     def initialize
       @games_and_score_data = {}
@@ -20,18 +21,25 @@ module Aggregate
 
       this_game = games_and_score_data[game_id]
 
-      # Handle the Points for Streaks logic
-      # (Time based points next)
       if this_game
         if event[:hits].include?(event[:guess])
           this_game[:streak] += 1
 
           if this_game[:streak] > 3
-            this_game[:score] += STREAK_SCORE[:higher_than_3]
+            streak_score = STREAK_SCORE[:higher_than_3]
           else
-            this_game[:score] += STREAK_SCORE[this_game[:streak]]
+            streak_score = STREAK_SCORE[this_game[:streak]]
           end
 
+          this_game[:score] += streak_score
+
+          # Update just with the streak score
+          # The update_leaderboard accumlates the score for each player
+          # ... so, no real need to accumulate score in Streak score
+          update_leaderboard(
+            player: event[:player],
+            score: streak_score
+          )
         else
           this_game[:streak] = 0
         end
@@ -42,10 +50,6 @@ module Aggregate
         }
       end
 
-      puts "Inside GameScorer"
-      p self
     end
-
-
   end
 end
