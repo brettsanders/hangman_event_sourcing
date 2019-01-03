@@ -9,6 +9,10 @@ require_relative '../domain_logic/scoring/complexity.rb'
 require_relative '../domain_logic/scoring/streaks.rb'
 require_relative '../domain_logic/scoring/speed.rb'
 
+# Todo: Hack for now
+# Move this into a Config and write to separate files (one for Replay another for Test)
+ENV['DO_NOT_UPDATE_LEADERBOARD'] = "true"
+
 # Given a Ledger of Events
 # Provide ability to View the Game state
 events_file = "winning_game"

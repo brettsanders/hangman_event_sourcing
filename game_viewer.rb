@@ -9,12 +9,15 @@ require_relative 'domain_logic/scoring/complexity.rb'
 require_relative 'domain_logic/scoring/streaks.rb'
 require_relative 'domain_logic/scoring/speed.rb'
 
+# Todo: Move this into a Config and write to separate files (one for Replay another for Test)
+ENV['DO_NOT_UPDATE_LEADERBOARD'] = true
+
 # Subscribers
 # Read Models would need to come after the domain_logic handlers
 # In Rails, this is handled via the Request/Response flow
 pub_sub = PubSub.new(
   subscribers: [
-    # Scoring::Complexity.new,
+    Scoring::Complexity.new,
     # Scoring::Speed.new,
     # Scoring::Streaks.new,
     Views::GameRenderer.new,

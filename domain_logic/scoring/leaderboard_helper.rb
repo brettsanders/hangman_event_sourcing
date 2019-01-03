@@ -1,5 +1,10 @@
 module LeaderboardHelper
   def update_leaderboard(player:, score:)
+    if ENV["DO_NOT_UPDATE_LEADERBOARD"]
+      puts "NOTE: ENV['DO_NOT_UPDATE_LEADERBOARD'] is set to true"
+      return
+    end
+
     leaderboard = csv_to_hash
 
     if leaderboard[player]
