@@ -24,25 +24,26 @@ events = json[:events]
 total_gameplay_events_count = events.length
 
 # Subscribers
-# Do not sub the Scorers for now. Need way to write to a TEST file
+scoring_complexity_handler = Scoring::Complexity.new
+scoring_speed_handler      = Scoring::Speed.new
+scoring_streak_handler     = Scoring::Streaks.new
 
-pub_sub = PubSub.new(
-  subscribers: [
-    # Scoring::Complexity.new,
-    # Scoring::Speed.new,
-    Scoring::Streaks.new,
-    Views::GameRenderer.new,
-    # Views::DudeGameRenderer.new,
-  ]
-)
+pub_sub = PubSub.new(subscribers: [
+  scoring_complexity_handler,
+  scoring_speed_handler,
+  scoring_streak_handler,
+  Views::GameRenderer.new,
+  # Views::DudeGameRenderer.new,
+])
+
+# Publish all Events
 events.each {|event| pub_sub.publish(event) }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - -
 # TESTS
 # - - - - - - - - - - - - - - - - - - - - - - - - -
 # Assertions
-
-if scoring_streaks.games_and_score_data == {"30a28b0d-9752-4ccf-a620-cf08c617cae4"=>{:score=>120, :streak=>2}}
+if scoring_streak_handler.games_and_score_data == {"30a28b0d-9752-4ccf-a620-cf08c617cae4"=>{:score=>120, :streak=>2}}
   puts "passing: score & streak for single game\n"
 else
   puts "FAIL: score & streak for single game\n"
