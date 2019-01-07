@@ -1,5 +1,5 @@
-module LeaderboardHelper
-  def update_leaderboard(player:, score:)
+class Leaderboard
+  def self.update_leaderboard(player:, score:)
     if ENV["DO_NOT_UPDATE_LEADERBOARD"]
       puts "NOTE: ENV['DO_NOT_UPDATE_LEADERBOARD'] is set to true"
       return
@@ -16,7 +16,7 @@ module LeaderboardHelper
     hash_to_csv(leaderboard)
   end
 
-  def hash_to_csv(hash)
+  def self.hash_to_csv(hash)
     sorted_by_score = hash.to_a.map{|h| [h[1], h[0]]}.sort.reverse
 
     CSV.open("domain_logic/scoring/_leaderboard.csv", "w") do |csv|
@@ -26,7 +26,7 @@ module LeaderboardHelper
     end
   end
 
-  def csv_to_hash
+  def self.csv_to_hash
     data = {}
     CSV.foreach("domain_logic/scoring/_leaderboard.csv") do |row|
       score = row[0].to_i
@@ -37,4 +37,5 @@ module LeaderboardHelper
 
     data
   end
+
 end

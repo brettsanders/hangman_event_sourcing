@@ -2,7 +2,7 @@ require_relative '../libraries.rb'
 
 require_relative '../views/game_renderer.rb'
 require_relative '../views/dude_game_renderer.rb'
-require_relative 'scoring/leaderboard_helper.rb'
+require_relative 'scoring/leaderboard.rb'
 require_relative 'scoring/complexity.rb'
 require_relative 'scoring/streaks.rb'
 require_relative 'scoring/speed.rb'

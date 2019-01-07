@@ -4,7 +4,7 @@ require_relative 'domain_logic/pub_sub.rb'
 
 require_relative 'views/game_renderer.rb'
 require_relative 'views/dude_game_renderer.rb'
-require_relative 'domain_logic/scoring/leaderboard_helper.rb'
+require_relative 'domain_logic/scoring/leaderboard.rb'
 require_relative 'domain_logic/scoring/complexity.rb'
 require_relative 'domain_logic/scoring/streaks.rb'
 require_relative 'domain_logic/scoring/speed.rb'

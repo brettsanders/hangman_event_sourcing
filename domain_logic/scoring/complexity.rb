@@ -3,7 +3,6 @@ require 'csv'
 module Scoring
   class Complexity
     attr_accessor :complexity_score
-    include LeaderboardHelper
 
     def initialize
       @complexity_score = nil
@@ -28,7 +27,7 @@ module Scoring
         @complexity_score = COMPLEXITY_SCORE[random_word_length]
       end
 
-      update_leaderboard(
+     Leaderboard.update_leaderboard(
         player: event[:player],
         score: @complexity_score
       )

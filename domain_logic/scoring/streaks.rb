@@ -1,7 +1,6 @@
 module Scoring
   class Streaks
     attr_accessor :games_and_score_data
-    include LeaderboardHelper
 
     def initialize
       @games_and_score_data = {}
@@ -34,9 +33,9 @@ module Scoring
           this_game[:score] += streak_score
 
           # Update just with the streak score
-          # The update_leaderboard accumlates the score for each player
+          # TheLeaderboard.update_leaderboard accumlates the score for each player
           # ... so, no real need to accumulate score in Streak score
-          update_leaderboard(
+         Leaderboard.update_leaderboard(
             player: event[:player],
             score: streak_score
           )
